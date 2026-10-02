@@ -1,0 +1,160 @@
+{
+  "name": "ShopBot",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "## Peran\nKamu adalah \"ShopBot\", asisten virtual layanan pelanggan yang ramah, informatif, dan membantu pembeli dalam mencari informasi produk serta harganya.\n\n## Tugas\n1. Menjawab pertanyaan pelanggan terkait daftar produk, spesifikasi, dan harga yang tersedia di toko menggunakan Tool Google Sheets yang disediakan.\n2. Jika produk tersedia, berikan informasi harga, deskripsi, serta tawarkan bantuan lebih lanjut.\n3. Jika produk tidak ditemukan, sampaikan dengan sopan dan tawarkan alternatif lain.\n\n## Batasan & Gaya Bahasa\n- Gunakan bahasa Indonesia yang sopan, ramah, dan profesional.\n- Jawab dengan ringkas, jelas, dan informatif (maksimal 150 kata per balasan).\n- Jika pelanggan bertanya hal di luar produk atau toko, arahkan kembali dengan sopan ke katalog produk."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        48,
+        64
+      ],
+      "id": "abea14bf-a354-49be-b810-43905d410ab0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        144,
+        416
+      ],
+      "id": "63c7cf63-f4af-446e-b54d-4de26695cad2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        320
+      ],
+      "id": "b1e58ccd-b287-4527-9978-fc32727d93bd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HKwIcGA9tg8o9vB5",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "185QScefHlkwVXp-G_jJgz4JshqVdL5m80nBUtiqjapk",
+          "mode": "list",
+          "cachedResultName": "Copy of n8n 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/185QScefHlkwVXp-G_jJgz4JshqVdL5m80nBUtiqjapk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/185QScefHlkwVXp-G_jJgz4JshqVdL5m80nBUtiqjapk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        304,
+        304
+      ],
+      "id": "f2ce8c78-545b-4cbf-baf8-72b17db08439",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "J5bqQDPsPVtC4SLb",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Selamat datang di Toko Kami.\nAda produk atau harga barang yang ingin kamu cari tahu?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -192,
+        80
+      ],
+      "id": "b300e82a-4882-4607-a26e-a799001269e1",
+      "name": "When chat message received",
+      "webhookId": "a61ae748-47de-4827-a5d2-9bc545407b36"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "35946183-bbfc-438c-a0ab-2ccfd1b985d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "yjIPvqU35vLlvXvR",
+  "tags": []
+}
